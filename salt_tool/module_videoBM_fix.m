@@ -4,12 +4,13 @@ function [pos_arr, error_arr, numPatch_arr, BMparam] = ...
 %   Detailed explanation goes here
 % Goal: perform block matching (BM)
 % Inputs:
-%   1. image            : [aa0, bb0] size image
+%   1. extractPatch     : video patches
 %   2. BMparam          : parameters for BM
 %       - dim               : patch width
 %       - n                 : n patch spatial dimension (vectorized)
 %       - stride            : patch extraction stride
 %       - searchWindowSize  : BM search window size
+%   3. referenceFrame   : #frame used as reference for BM
 % Outputs:
 %   1. pos_arr          : [tensorSize, Nimage, Mimage] BM indexing
 %   2. error_arr        : [tensorSize, Nimage, Mimage] BM errors

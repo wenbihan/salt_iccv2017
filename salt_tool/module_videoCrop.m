@@ -1,7 +1,6 @@
 function reconBlock = module_videoCrop(video_out, param)
 %MODULE_VIDEOCROP Summary of this function goes here
-%   Detailed explanation goes here
-% [aa, bb, nFrame] = size(video_out);
+%   Goal: crop the video from the enlarged one
 frontPadSize = param.frontPadSize;
 aa0 = param.aa0;
 bb0 = param.bb0;

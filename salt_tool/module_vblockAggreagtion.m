@@ -1,21 +1,19 @@
 function [reconBlock, reconWeight]  = module_vblockAggreagtion(patches, weights, param)
 %MODULE_AGGREAGTION Summary of this function goes here
-%   Goal:   Aggregate the patches back to the images (shrinking) with weights
+%   Goal:   Aggregate the patches back to the images with weights
 %   Inputs:
 %       1. patches              : reconstructed patches
 %       2. weights              : weights for LRpatch
 %       3. param                : parameters for reconstruction
 %   Outputs:
-%       1. Xr                   : reconstructed image by patch aggregation
+%       1. reconBlock           : aggregated image
+%       2. reconWeight          : aggregated weights
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%% parameters %%%%%%%%%%%%%%%%%%%%%%
 aa                  =   param.aa;
 bb                  =   param.bb;
-% aa0                 =   param.aa0;
-% bb0                 =   param.bb0;
 nFrame              =   size(patches, 3); 
-% frontPadSize        =   param.frontPadSize;
 dim                 =   param.dim;
 Mimage              =   aa - dim + 1;
 Nimage              =   bb - dim + 1;

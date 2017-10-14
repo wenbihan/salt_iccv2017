@@ -4,14 +4,13 @@ function [denoisedPatch, weights] = ...
 %   Detailed explanation goes here
 % Goal: Apply Low-rank approximation by hard SVD thresholding
 % Inputs:
-%   1. patchNoisy       : [aa0, bb0] size image
+%   1. extractPatch     : extracted patches from the video
 %   2. blk_arr          : BM patch indices in each tensor
 %   3. blk_pSize        : tensor size
 %   4. param            : parameters for BM
 %       - numTensorPatch    : #patch in each tensor
 %       - thr               : Singular value threshold, = thr0 * sigma
 %       - n                 : spatial dimension
-%   5. buffer           : buffer for online W update
 % Outputs:
 %   1. denoisedPatch    : denoised patch (with weights) after LR approx.
 %   2. Weight           : weights (#times that appears in tensor)

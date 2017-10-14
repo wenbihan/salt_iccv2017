@@ -4,24 +4,21 @@ function [denoisedPatch, weights, buffer] = module_TLapprox(extractPatch, ...
 %   Detailed explanation goes here
 % Goal : online VIDOSAT denoising the buffer data, update transform
 % Inputs:
-%   1. buffer            : buffer data
+%   1. extractPatch      : noisy patches for online TL
+%   2. buffer            : buffer data
 %           - YXT
 %           -  D
-%   3. idx               : spatial patch size, i.e., [dim, dim]
-%   4. D                 : n * n, most recent transform
-%   5. rows / cols       : row/col indices
-%   6. tempBatch         : temporal Gt data, aa * bb * K * 2
-%   7. tempWeight        : temporal weights, aa * bb * K * 2
-%   8. tempFrom / tempTo : 1 or 2, pointer to I/O
+%   3. blk_arr           : block matching result (indices)
+%   4. param             : salt parameters
 % Output:
 %   6. denoisedPatch     : temporal Gt data, aa * bb * K * 2
-%   7. weights           : temporal weights, aa * bb * K * 2\
+%   7. weights           : temporal weights, aa * bb * K * 2
 %   1. buffer            : buffer data
 %           - RS         : n*n, YY'
 %           - TS         : n*n, YX'
 %           - l3         : scalar, regularizer weight 
 %           - blocks     : reconstructed blocks
-%   4. D                 : n * n, most recent transform
+%           - scores     : scores for the reconstructed patches
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %   paramters
@@ -39,8 +36,8 @@ weights             =   zeros(1, numPatchPerFrame, numFrameBuffer);
 blk_arr             =   blk_arr(1 : param.nFrame, :);
 numTotal            =   size(blk_arr, 2);
 
-currData        =   0;
-TLstart         =   1;            % global pointer
+currData        =   0;          % data index
+TLstart         =   1;           
 for     k   =   1   :   numTotal
     currData                 =   currData + 1;
     curTensorInd            =   blk_arr(:, k);
@@ -64,7 +61,6 @@ for     k   =   1   :   numTotal
             denoisedPatch(:, curTensorInd)   =   ...s
                 denoisedPatch(:, curTensorInd) + curTensor;
             weights(:, curTensorInd)         =   weights(:, curTensorInd) + curWeight;
-%             weights(:, curTensorInd)         =   weights(:, curTensorInd) + 1;
         end 
         TLstart         =   k + 1;
         currData        =   0;

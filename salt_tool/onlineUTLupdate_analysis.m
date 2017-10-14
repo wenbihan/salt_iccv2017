@@ -60,7 +60,6 @@ if isfield(param, 'isRecon') && param.isRecon
     updateBuffer.TLaproxError = sum((X2 - X1).^2);
     % recon
     blocks = D' * X2;
-
     updateBuffer.blocks = blocks;               % instantaneous recon.
     updateBuffer.scores = scores;
 end

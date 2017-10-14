@@ -1,5 +1,6 @@
 function X = module_video2patch(video, param)
 %MODULE_IM2PATCH Summary of this function goes here
+% Goal : decompose the 3D tensor (e.g., video) into 2D patches
 psize = param.dim;
 stride = param.stride;
 [aa, bb, numFrame] = size(video);
