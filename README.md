@@ -4,12 +4,12 @@ software package of salt video denoising, ICCV 2017
 
 
 # SALT based Video Denoising
-Copy-Move Forgery Database with Similar but Genuine Objects
 =============
 
-The Copy-Move Forgery Database with Similar but Genuine Objects (COVERAGE) accompanies the following publication: "Joint Adaptive Sparsity and Low-Rankness on the Fly: An Online Tensor Reconstruction Scheme for Video Denoising," IEEE International Conference on Computer Vision (ICCV), 2017 [ICCV 2017] (http://openaccess.thecvf.com/ICCV2017.py)"
+SALT based Video Denoising accompanies the following publication: "Joint Adaptive Sparsity and Low-Rankness on the Fly: An Online Tensor Reconstruction Scheme for Video Denoising," IEEE International Conference on Computer Vision (ICCV), 2017 [ICCV 2017] (http://openaccess.thecvf.com/ICCV2017.py)"
 
-Dataset description:
+Algorithm description:
+-----
 
 We propose a video denoising method, based on a novel Sparse and Low-rank Tensor (SALT) model. An efficient and unsupervised
 online unitary sparsifying transform learning method is introduced to impose adaptive sparsity on the fly. SALT based video denoising exhibits low latency and can potentially handle streaming videos. To the best of our knowledge, this is the first work that combines adaptive sparsity and low-rankness for video denoising, and the first work of solving the proposed problem in an online fashion. 
@@ -18,7 +18,7 @@ You can download our other software packages at: [Transform Learning Site](http:
 
 Paper
 -----
-Paper available [here](http://openaccess.thecvf.com/content_iccv_2017/html/Wen_Joint_Adaptive_Sparsity_ICCV_2017_paper.html).
+Paper available [here](http://openaccess.thecvf.com/content_iccv_2017/html/Wen_Joint_Adaptive_Sparsity_ICCV_2017_paper.html). In case of use, please cite our publication.
 
 Bihan Wen, Yanjun Li, Luke Pfister, and Yoram Bresler, “Joint Adaptive Sparsity and Low-Rankness on the Fly: An Online Tensor Reconstruction Scheme for Video Denoising,” in Proc. IEEE Int. Conf. Computer Vision (ICCV), 2017.
 
