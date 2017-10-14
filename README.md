@@ -1,7 +1,7 @@
 # SALT based Video Denoising
 =============
 
-SALT based Video Denoising accompanies the following publication: "Joint Adaptive Sparsity and Low-Rankness on the Fly: An Online Tensor Reconstruction Scheme for Video Denoising," IEEE International Conference on Computer Vision (ICCV), 2017 [ICCV 2017] (http://openaccess.thecvf.com/ICCV2017.py)"
+SALT based Video Denoising accompanies the following publication: "Joint Adaptive Sparsity and Low-Rankness on the Fly: An Online Tensor Reconstruction Scheme for Video Denoising," IEEE International Conference on Computer Vision (ICCV), 2017 [ICCV 2017](http://openaccess.thecvf.com/ICCV2017.py)"
 
 Description:
 -----
