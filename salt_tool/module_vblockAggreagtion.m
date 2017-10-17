@@ -9,7 +9,6 @@ function [reconBlock, reconWeight]  = module_vblockAggreagtion(patches, weights,
 %       1. reconBlock           : aggregated image
 %       2. reconWeight          : aggregated weights
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%% parameters %%%%%%%%%%%%%%%%%%%%%%
 aa                  =   param.aa;
 bb                  =   param.bb;
@@ -21,7 +20,6 @@ r                   =   1 : Mimage;
 c                   =   1 : Nimage;
 reconBlock          =   zeros(aa, bb, nFrame);
 reconWeight         =   zeros(aa, bb, nFrame);
-
 %%%%%%%%%%%%%%% Aggregation %%%%%%%%%%%%%%
 for idxFrame = 1 : nFrame
     k                   =   0;

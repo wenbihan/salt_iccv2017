@@ -38,7 +38,7 @@ function [Xr, outputParam] = VIDOSAT_videodenoising(data, param)
 %                   - isTesting: Set to 1 for fast testing the code
 %
 % Outputs -
-%       1. Xr - Image reconstructed with OCTOBOS_imagedenoising algorithm.
+%       1. Xr - Image reconstructed with VIDOSAT_Videodenoising algorithm.
 %       2. outputParam: Structure that contains the parameters of the
 %       algorithm output for analysis as follows
 %       -
@@ -66,13 +66,8 @@ strideTemporal = param.strideTemporal;              % timeOverlap
 D = param.transform;
 sig2 = param.sig2;
 
-[oracle, numFrame, aa, bb] = avi2grayVideo(oracle);     % loading oracle
-%%% for quick testing purpose %%%
-if isfield(param, 'isTesting') && param.isTesting 
-    numFrame = 10;
-    noisy = noisy(:,:,1:numFrame);
-    oracle = oracle(:,:,1:numFrame);
-end
+[aa, bb, numFrame] = size(noisy);
+% [oracle, numFrame, aa, bb] = avi2grayVideo(oracle);     % loading oracle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 IMout=zeros(aa, bb, numFrame);
 Weight=zeros(aa, bb, numFrame);

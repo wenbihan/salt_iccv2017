@@ -6,7 +6,6 @@ function param = SALT_videodenoise_param(param)
 %generating the results in the "SALT paper". However, the user is
 %advised to carefully modify this function, thus choose optimal values  
 %for the parameters depending on the specific data or task at hand.
-
 sig                     =   param.sig;                  % noise level
 param.stride            =   1;                          % spatial stride
 param.strideTemporal    =   1;                          % temp. stride

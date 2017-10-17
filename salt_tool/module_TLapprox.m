@@ -28,14 +28,12 @@ ns                  =   param.nSpatial;
 sizeMini            =   param.VIDOmini;
 n3D                 =   param.n3D;
 nFrame              =   param.nFrame;
-
 % output
 miniBlock           =   zeros(n3D, sizeMini);
 denoisedPatch       =   zeros(ns, numPatchPerFrame, numFrameBuffer);
 weights             =   zeros(1, numPatchPerFrame, numFrameBuffer);
 blk_arr             =   blk_arr(1 : param.nFrame, :);
 numTotal            =   size(blk_arr, 2);
-
 currData        =   0;          % data index
 TLstart         =   1;           
 for     k   =   1   :   numTotal

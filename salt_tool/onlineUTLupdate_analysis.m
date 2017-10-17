@@ -41,22 +41,13 @@ YXT = alpha * YXT + (blocks * X2');
 [U, ~, V] = svd(YXT);
 % (4) Update D
 D = V * U';
-
 if isfield(param, 'isRecon') && param.isRecon
-
     % sparse coding with updated D
     X1 = D * blocks;
-    % (1) - enforce sparsity >= 1
+    %  enforce sparsity >= 1
     [X2, scores] = sparse_l0(X1, thr);
-%     % (2) - not enforce sparsity
-%     support = (bsxfun(@ge, abs(X1), sqrt(l5)));
-%     scores = sum(support);   
-%     X2 = X1 .* support;
     updateBuffer.sparsity = scores;
     scores = sparseWeight ./ scores;  
-%     if any(scores == inf)
-%         scores(scores == inf) = 0;
-%     end  
     updateBuffer.TLaproxError = sum((X2 - X1).^2);
     % recon
     blocks = D' * X2;

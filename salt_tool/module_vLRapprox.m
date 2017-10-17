@@ -22,20 +22,16 @@ numFrameBuffer      =   param.numFrameBuffer;
 ns                  =   param.nSpatial;
 dim                 =   param.dim;
 thr                 =   param.LRthr;            % LR threshold value
-
 % output
 denoisedPatch       =   zeros(ns, numPatchPerFrame, numFrameBuffer);
 weights             =   zeros(1, numPatchPerFrame, numFrameBuffer);
-% LRrankMap           =   zeros(1, numPatchPerFrame, numFrameBuffer);
 numRef              =   size(blk_arr, 2);
-
 %   LR
 for  k  =  1 : numRef
     curTensorSize           =   blk_pSize(:, k);
     curTensorInd            =   blk_arr(1 : curTensorSize, k);
     Scenter                 =   extractPatch(:, curTensorInd);
-    sizeScale               =   (sqrt(double(curTensorSize)) + dim)^2;
-    
+    sizeScale               =   (sqrt(double(curTensorSize)) + dim)^2;    
     % %%%% LR part %%%%
     mB              =   mean(Scenter, 2);
     Scenter         =   double(bsxfun(@minus, Scenter, mB));    % de-mean
@@ -45,10 +41,6 @@ for  k  =  1 : numRef
     thr2            =   thr^2;
     diatthr         =   (diat>thr2);
     diatthr(end)    =   true;                   % at least rank-1
-%     rankWeightTable(:, curTensorInd) = rankWeightTable(:, curTensorInd) ...
-%         + 1 / sum(diatthr(:));
-%     LRrankMap(1, curTensorInd) = ...
-%         LRrankMap(1, curTensorInd) + sum(diatthr(:));
     ys              =   bas * diag(diatthr) * bas' * Scenter;
     ys              =   bsxfun(@plus, ys, mB);              % LR estimate 
     denoisedPatch(:, curTensorInd)          =   ...

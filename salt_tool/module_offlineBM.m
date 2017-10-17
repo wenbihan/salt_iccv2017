@@ -3,7 +3,6 @@ param = SALT_videodenoise_param(param);             % parameters
 % (1-1) video frame-wise << enlarging >>
 [ref, param]        =   module_videoEnlarge(ref, param);
 [aa, bb, numFrame]  =   size(ref);
-
 % parameters
 dim                         =   param.dim;              % patch length, i.e., 8
 tempSearchRange             =   param.tempSearchRange;  % range, i.e., 4
@@ -18,7 +17,6 @@ idxMat([[1:slidingDis:end-1],end],[[1:slidingDis:end-1],end]) = 1;
 [indMatA, indMatB]          =   size(idxMat);
 param.numPatchPerFrame      = 	indMatA * indMatB;
 param.numPatchBuffer        =   param.numPatchPerFrame * param.numFrameBuffer;
-
 % initialize output
 BMresult            =   uint32(zeros(param.tensorSize, ...
     (aa-param.searchWindowSize+1) * (bb-param.searchWindowSize+1), ...
@@ -26,7 +24,6 @@ BMresult            =   uint32(zeros(param.tensorSize, ...
 BMsize              =   uint32(zeros(1, ...
     (aa-param.searchWindowSize+1) * (bb-param.searchWindowSize+1), ...
     numFrame));
-
 % frame-wise BM starts
 tic;
 for frame = 1 : numFrame

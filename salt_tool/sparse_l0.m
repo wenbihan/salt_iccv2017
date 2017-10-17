@@ -3,7 +3,6 @@ function [X, nonZeromap] = sparse_l0(X, threshold)
 %   Detailed explanation goes here
 [~, maxInd] = max(abs(X));
 [n, N] = size(X);
-% maxVal = X(maxInd);
 nonZeromap = (abs(X) >= threshold);
 base = 0 : n : n*(N - 1);
 maxInd = maxInd + base;

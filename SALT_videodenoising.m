@@ -28,28 +28,16 @@ function [Xr, outputParam] = SALT_videodenoising(data, param)
 %       -
 %                   - sig: Standard deviation of the additive Gaussian
 %                   noise (Example: 20)
-%                   - nSpatial: Spatial patch size as (Example: 64)
-%                   - stride: stride of overlapping patches (Example: 1)
-%                   - strideTemporal: stride of overlapping frames (Example: 1)
-%                   - nFrame: number of frames in each tensor patch
-%                   (Example: 8)
-%                   (Optional, set if you know what you are doing)
-%                   - showStats: Set to 1, to output Status parameters
-%                   - isTesting: Set to 1 for fast testing the code
-%
+%                   - onlineBMflag : set to true, if online VIDOSAT
+%                   precleaning is used.
 % Outputs -
-%       1. Xr - Image reconstructed with OCTOBOS_imagedenoising algorithm.
+%       1. Xr - Image reconstructed with SALT_videodenoising algorithm.
 %       2. outputParam: Structure that contains the parameters of the
 %       algorithm output for analysis as follows
 %       -
-%                   - transform:  learned online transform
-%                   - psnrXr: PSNR of Xr, if the oracle is provided
+%                   - PSNR: PSNR of Xr, if the oracle is provided
 %                   - timeOut:   run time of the denoising algorithm
 %                   - framePSNR: per-frame PSNR values
-%       (optional)
-%                   - condNum: condition number of transform in process
-%                   - PSNRprocess: PSNR value in process for each pass
-%                   - finalcondNum: final condition of learned transform
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%% parameter & initialization %%%%%%%%%%%%%%
@@ -62,7 +50,6 @@ if param.onlineBMflag
     data.ref = module_videoEnlarge(data.ref, param);  
 end
 [aa, bb, numFrame] = size(noisy);               % height / width / depth
-
 % (1-2) parameters
 dim                         =   param.dim;          % patch length, i.e., 8
 n3D                         =   param.n3D;          % TL tensor size
@@ -74,24 +61,17 @@ slidingDis                  =   param.strideTemporal;
 numFrameBuffer              =   tempSearchRange * 2 + 1;
 param.numFrameBuffer        =   numFrameBuffer;
 nFrame                      =   param.nFrame;
-
-% (1-4) 2D index
+% (1-3) 2D index
 idxMat                      =   zeros([aa, bb] - blkSize + 1);
 idxMat([[1:slidingDis:end-1],end],[[1:slidingDis:end-1],end]) = 1;
 [indMatA, indMatB]          =   size(idxMat);
-% param.indMatA               =   indMatA;
-% param.indMatB               =   indMatB;
 param.numPatchPerFrame      = 	indMatA * indMatB;
-% param.numPatchBuffer        =   param.numPatchPerFrame * param.numFrameBuffer;
-% (1-5) output intialization
-
-% (1-3) buffer and output initialization
+% (1-4) buffer and output initialization
 IMout               =   zeros(aa, bb, numFrame);
 Weight              =   zeros(aa, bb, numFrame);
 buffer.YXT          =   zeros(n3D, n3D);
 buffer.D            =   kron(kron(dctmtx(dim), dctmtx(dim)), dctmtx(nFrame));
-
-%%%%%%%%%%%%%%%%% Main Program - video streaming %%%%%%%%%%%%%
+%%%%%%%%%%%%%%% (2) Main Program - video streaming %%%%%%%%%%%%%
 tic;
 for frame = 1 : numFrame
     display(frame);
@@ -106,12 +86,9 @@ for frame = 1 : numFrame
         curFrameRange   =   frame - tempSearchRange : frame + tempSearchRange;
         centerRefFrame  =   startChangeFrameNo;
     end
-    
     % (1) Input buffer
-    tempBatch       =   noisy(:, :, curFrameRange);    
-    % patch extraction
-    extractPatch    =   module_video2patch(tempBatch, param);  
-    
+    tempBatch       =   noisy(:, :, curFrameRange);     
+    extractPatch    =   module_video2patch(tempBatch, param);  % patch extraction
     % (2) KNN << Block Matching (BM) >>
     % Options: Online / Offline BM
     if param.onlineBMflag
@@ -125,15 +102,12 @@ for frame = 1 : numFrame
         blk_arr         =   data.BMresult(:, :, frame);
         blk_pSize       =   data.BMsize(:, :, frame);
     end
-   
     % (3) Denoising current G_t using LR approximation
     [denoisedPatch_LR, weights_LR] = ...
         module_vLRapprox(extractPatch, blk_arr, blk_pSize, param); 
-
     % (4) Denoising current G_t using Online TL
     [denoisedPatch_TL, frameWeights_TL, buffer] = ...
         module_TLapprox(extractPatch, buffer, blk_arr, param);
-
     % (5) fusion of the LR + TL + noisy here
     denoisedPatch = denoisedPatch_LR + denoisedPatch_TL + extractPatch * param.noisyWeight;
     weights = weights_LR + frameWeights_TL + param.noisyWeight;    
@@ -145,11 +119,9 @@ for frame = 1 : numFrame
     Weight(:, :, curFrameRange) = Weight(:, :, curFrameRange) + tempWeight;
 end
 outputParam.timeOut = toc;
-% Normalization
+% (3) Normalization and Output
 Xr = module_videoCrop(IMout, param) ./ module_videoCrop(Weight, param);
-% denoised video PSNR
 outputParam.PSNR = PSNR3D(Xr - double(data.oracle));
-% frame-wise PSNR values
 framePSNR = zeros(1, numFrame);
 for i = 1 : numFrame
     framePSNR(1, i) = PSNR(Xr(:,:,i) - double(data.oracle(:,:,i)));

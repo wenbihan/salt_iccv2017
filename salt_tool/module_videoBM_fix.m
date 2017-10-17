@@ -15,7 +15,6 @@ function [pos_arr, error_arr, numPatch_arr, BMparam] = ...
 %   1. pos_arr          : [tensorSize, Nimage, Mimage] BM indexing
 %   2. error_arr        : [tensorSize, Nimage, Mimage] BM errors
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 aa                  =   BMparam.aa;
 bb                  =   BMparam.bb;
 dim                 =   BMparam.dim;
@@ -23,8 +22,6 @@ searchWindowSize    =   BMparam.searchWindowSize;
 stride              =   BMparam.stride;
 tensorSize          =   BMparam.tensorSize;
 numFrame            =   size(extractPatch, 3);
-
-
 % row / col number of total patches
 Nimage              =   aa-dim+1;               
 Mimage              =   bb-dim+1;               
@@ -34,8 +31,6 @@ Mwindow             =   1:stride:bb-searchWindowSize+1;
 % #patchs in search window
 swidth              =   searchWindowSize - dim + 1;
 swidth2             =   swidth^2;
-
-% Index image
 %/// noisy all possible patch indexing
 numTotalPatch       =   Nimage * Mimage * numFrame; 
 idxTotalPatch       =   1 : numTotalPatch;                      
@@ -71,19 +66,10 @@ for  i  =  1 : numWindowN
             patchCandidate - meanCandidate(:, ones(1, swidth2 * numFrame));
         metric                  =   mean(dis.^2);
         [BMerror, ind]          =   sort(metric);
-        %         %// distance: Correlation & sorting
-        %         interProduct            = sum(bsxfun(@times, B, v));
-        %         normTotal               = norm(v) * sqrt(sum(B.^2));
-        %         metric                  = abs(bsxfun(@rdivide, interProduct, normTotal));
-        %         [BMerror, ind]          = sort(metric, 'descend');
-        
         %// take tensorSize-largest
         pos_arr(:, (j-1)*numWindowN + i)    =  idx( ind(1:tensorSize) );
         error_arr(:, (j-1)*numWindowN + i)  =  BMerror(ind(1:tensorSize));
     end
 end
-
-
-
 end
 

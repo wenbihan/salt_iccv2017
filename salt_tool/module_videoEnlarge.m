@@ -38,9 +38,7 @@ for idxFrame = 1 : numFrame
     enlargedVideo(:, :, idxFrame)      =   ...
         enlarge(video(:, :, idxFrame), frontPadSize, endRowPadSize, endColPadSize);
 end
-
 end
-
 function y = enlarge(x, frontPadSize, endRowPadSize, endColPadSize)
 % enlarge matrix 
 % Inputs:
